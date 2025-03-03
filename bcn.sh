@@ -1,12 +1,16 @@
 #!/bin/bash
-eval "export $(egrep -z DBUS_SESSION_BUS_ADDRESS /proc/$(pgrep -u $LOGNAME gnome-session)/environ)";
 
+# define currency
+currency=bytecoin-bcn
 
-# Bytecoin-bcn Url base
-currency='https://api.coinmarketcap.com/v1/ticker/bytecoin-bcn/'
+# build url
+endpoint=https://api.coincap.io/v2/assets/$currency
 
-# Symbol
-symbol="Bytecoin-bcn"
+# make request and get price
+respuesta=$(curl -s $endpoint | jq -r '.data.priceUsd')
 
-# Show msg
-DISPLAY=:0 /usr/bin/notify-send -a 'Bytecoin-bcn' -u low -t 500 $(printf '%s\n' "$symbol") "USD -> "$(curl $(printf '%s\n' "$currency")  | jq -r '.[0].price_usd')
+# build message to send notify
+precio="Precio: $respuesta USD" # Usar comillas dobles para la expansión
+
+# sending notify to screen
+/usr/bin/notify-send "$currency" "$precio"
