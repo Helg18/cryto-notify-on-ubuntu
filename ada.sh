@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # define currency
-currency=ada
+currency=cardano
 
 # build url
 endpoint=https://api.coincap.io/v2/assets/$currency
